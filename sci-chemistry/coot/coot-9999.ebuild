@@ -18,7 +18,7 @@ MY_P=${PN}-${MY_PV}
 
 DESCRIPTION="Crystallographic Object-Oriented Toolkit for model building, completion and validation"
 HOMEPAGE="http://www.biop.ox.ac.uk/coot/"
-SRC_URI="test? ( http://www.biop.ox.ac.uk/coot/devel/greg-data.tar.gz )"
+SRC_URI="test? ( http://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/data/greg-data.tar.gz )"
 ESVN_REPO_URI="http://coot.googlecode.com/svn/trunk"
 
 SLOT="0"

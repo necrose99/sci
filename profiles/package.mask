@@ -32,6 +32,7 @@
 
 # Live ebuilds go here
 # keep this on top
+>=sci-libs/fftw-9999
 >=media-gfx/brlcad-9999
 >=dev-lang/path64-9999
 >=dev-lang/julia-9999
@@ -122,12 +123,15 @@ sci-visualization/vtkPOFFReader
 # new blas/lapack framework
 =sci-libs/blas-reference-20070226*
 
-# Francois Bissey (kiwifb) (29 Oct 2010)
-# f.r.bissey@massey.ac.nz
-# mask paraview-3.8.* as there are no stable versions in the tree
-# Avoid accidental upgrade
->=sci-visualization/paraview-3.8.0
 
 # Justin Lecher <jlec@gentoo.org> (11 May 2009)
 # work in progress 
 =sci-chemistry/almost-1.0.3-r1
+
+# Nicolas Bock <nicolasbock@gmail.com> (17 Sep 2003)
+# The versioning scheme of freeon changed from a date based version to a more
+# standard form. Now the latest release is considered a downgrade by portage.
+# Masking the date based releases to get users to upgrade.
+=sci-chemistry/freeon-2012.05.03
+=sci-chemistry/freeon-2013.09.12
+=sci-chemistry/freeon-2013.09.16
