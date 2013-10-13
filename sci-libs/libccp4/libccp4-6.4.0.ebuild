@@ -9,9 +9,11 @@ AUTOTOOLS_AUTORECONF=true
 
 inherit autotools-utils fortran-2
 
+MY_P="${PN}-${PV}-rc1"
+
 DESCRIPTION="CCP4 lib"
 HOMEPAGE="http://www.ccp4.ac.uk/"
-SRC_URI="ftp://ftp.ccp4.ac.uk/opensource/${P}.tar.gz"
+SRC_URI="ftp://ftp.ccp4.ac.uk/opensource/${MY_P}.tar.gz"
 
 SLOT="0"
 LICENSE="GPL-3 LGPL-3"
@@ -22,8 +24,6 @@ RDEPEND="sci-libs/mmdb"
 DEPEND="${RDEPEND}"
 
 AUTOTOOLS_IN_SOURCE_BUILD=1
-
-PATCHES=( "${FILESDIR}"/${P}-pc.patch )
 
 pkg_setup() {
 	use fortran && fortran-2_pkg_setup
