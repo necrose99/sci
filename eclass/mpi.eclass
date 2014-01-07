@@ -6,15 +6,17 @@ inherit multilib
 
 # @ECLASS: mpi.eclass
 # @MAINTAINER:
-#	Justin Bronder <jsbronder@gentoo.org>
-# @BLURB:  Common functions for mpi-pkg.eclass and mpi-imp.eclass
+# Justin Bronder <jsbronder@gentoo.org>
+# Cluster Team <cluster@gentoo.org>
+# @AUTHOR:
+# Justin Bronder <jsbronder@gentoo.org>
+# @BLURB:  Common functions for mpi support in ebuilds
 
 # History:
 #	2009-06-26 (jsbronder):  Add ability to require common use flags.
 #		Remove dep on eselect-mpi (it's in sys-cluster/empi)
 #		Use virtual/$class to get imp dep in mpi_pkg_deplist.
 #	2008-11-20 (jsbronder):  Initial rewrite from old mpi.eclass
-
 
 #####################
 # Private Variables #
@@ -25,34 +27,40 @@ __MPI_ALL_IMPLEMENTATION_PNS="mpich mpich2 openmpi lam-mpi openib-mvapich2"
 # All mpi implentations that can be classed.
 __MPI_ALL_CLASSABLE_PNS="mpich openmpi mpich2 lam-mpi"
 
-
-
 ###################################################################
 # Generic Functions that are used by Implementations and Packages #
 ###################################################################
 
 # @ECLASS-VARIABLE: MPI_UNCLASSED_DEP_STR
-# @DESCRIPTION: String inserted into the deplist when not using a classed
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# String inserted into the deplist when not using a classed
 # install.
 
 # @FUNCTION: mpi_classed
 # @USAGE:
 # @RETURN: True if this build is classed.
+# @DESCRIPTION:
+# Check if we are classed
 mpi_classed() {
 	[[ ${CATEGORY} == mpi-* ]]
 }
 
 # @FUNCTION: mpi_class
 # @USAGE:
-# @RETURN:  The name of the current class, or nothing if unclassed.
+# @RETURN: The name of the current class, or nothing if unclassed
+# @DESCRIPTION:
+# Get the class if the installaiton is classed
 mpi_class() {
 	mpi_classed && echo "${CATEGORY}"
 }
 
 # @FUNCTION: mpi_root
 # @USAGE:
-# @RETURN:  The root path that packages should start installing to.  In the end,
-# the majority of a package will will install to ${ROOT}$(mpi_root).
+# @RETURN: The root path that packages should be installed to.
+# @DESCRIPTION:
+# Query for the root path of the package. In the end, the majority of a package
+# will will install to ${EROOT}$(mpi_root).
 mpi_root() {
 	if mpi_classed; then
 		echo "/usr/$(get_libdir)/mpi/$(mpi_class)/"
@@ -195,6 +203,8 @@ mpi_dosym()     { _mpi_do "dosym"        $*; }
 ###########################################
 
 # @FUNCTION: mpi_imp_deplist
+# @DESCRIPTION:
+# asd
 # @USAGE:
 # @RETURNS: Returns a deplist that handles the blocking between mpi
 # implementations, and any blockers as specified in MPI_UNCLASSED_DEP_STR
@@ -258,6 +268,8 @@ MPI_PKG_USE_ROMIO="${MPI_PKG_USE_ROMIO:-0}"
 
 
 # @FUNCTION: mpi_pkg_deplist
+# @DESCRIPTION:
+# asd
 # @USAGE:
 # @RETURN: Returns a deplist comprised of valid implementations and any blockers
 # depending on if this package is building with mpi class support.
@@ -383,7 +395,8 @@ _mpi_pkg_compiler() {
 
 # @FUNCTION: mpi_pkg_set_env
 # @USAGE:
-# @DESCRIPTION:  Exports 'some influential environment variables'.  CC, CXX, F77, FC
+# @DESCRIPTION:
+# Exports 'some influential environment variables'.  CC, CXX, F77, FC
 mpi_pkg_set_env() {
 	if mpi_classed; then
 		_mpi_oCC=$CC
@@ -403,7 +416,8 @@ mpi_pkg_set_env() {
 
 # @FUNCTION: mpi_pkg_restore_env
 # @USAGE:
-# @DESCRIPTION:  Attempts to undo the damage done by mpi_pkg_set_env
+# @DESCRIPTION:
+# Attempts to undo the damage done by mpi_pkg_set_env
 mpi_pkg_restore_env() {
 	if mpi_classed; then
 		export CC=$_mpi_oCC
