@@ -420,21 +420,21 @@ mpi_pkg_set_env() {
 # Attempts to undo the damage done by mpi_pkg_set_env
 mpi_pkg_restore_env() {
 	if mpi_classed; then
-		export CC=$_mpi_oCC
-		export CXX=$_mpi_oCXX
-		export F77=$_mpi_oF77
-		export FC=$_mpi_oFC
-		export PKG_CONFIG_PATH=$_mpi_oPCP
-		export LD_LIBRARY_PATH=$_mpi_oLLP
+		export CC=${_mpi_oCC}
+		export CXX=${_mpi_oCXX}
+		export F77=${_mpi_oF77}
+		export FC=${_mpi_oFC}
+		export PKG_CONFIG_PATH=${_mpi_oPCP}
+		export LD_LIBRARY_PATH=${_mpi_oLLP}
 	fi
 }
 
-
-
 # @FUNCTION: _get_eselect_var
-# @USAGE: $1 - Variable to get from the class definition
-# @RETURN:  If classed, and given a valid variable, the contents; empty
-# otherwise.
+# @USAGE: VARIABLE
+# @RETURN: If classed, return VARIABLE content; empty otherwise
+# @INTERNAL
+# @DESCRIPTION:
+# Get variable for a class from the env.d file
 _get_eselect_var() {
 	if mpi_classed && [ -n "${1}" ]; then
 		echo "$(eselect mpi printvar $(mpi_class) ${1} 2>/dev/null)"
