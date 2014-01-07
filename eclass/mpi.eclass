@@ -339,35 +339,40 @@ mpi_pkg_base_imp() {
 }
 
 # @FUNCTION: mpi_pkg_cc
-# @USAGE:
-# @DESCRIPTION:  Returns the full path to the mpi C compiler.  Trys to find one
-# even if this build is unclassed.  If return is empty, user should assume the
-# implementation does not support this compiler
+# @RETURN: Full path to the mpi C compiler
+# @DESCRIPTION:
+# Trys to find a mpi C compiler, even if this build is unclassed.
+# If return is empty, user should assume the implementation does not support
+# this compiler
+mpi_pkg_cc() { _mpi_pkg_compiler "MPI_CC"  "cc"; }
+
 # @FUNCTION: mpi_pkg_cxx
-# @USAGE:
-# @DESCRIPTION:  Returns the full path to the mpi C++ compiler.  Trys to find one
-# even if this build is unclassed.  If return is empty, user should assume the
-# implementation does not support this compiler
+# @RETURN: Full path to the mpi C++ compiler
+# @DESCRIPTION:
+# Trys to find a mpi C++ compiler, even if this build is unclassed.
+# If return is empty, user should assume the implementation does not support
+# this compiler
+mpi_pkg_cxx() { _mpi_pkg_compiler "MPI_CXX"  "cxx"; }
+
 # @FUNCTION: mpi_pkg_fc
-# @USAGE:
-# @DESCRIPTION:  Returns the full path to the mpi f90 compiler.  Trys to find one
-# even if this build is unclassed.  If return is empty, user should assume the
-# implementation does not support this compiler
-# @FUNCTION: mpi_pkg_f77
-# @USAGE:
-# @DESCRIPTION:  Returns the full path to the mpi f77 compiler.  Trys to find one
-# even if this build is unclassed.  If return is empty, user should assume the
-# implementation does not support this compiler
+# @RETURN: Full path to the mpi F90 compiler
+# @DESCRIPTION:
+# Trys to find a mpi F90 compiler, even if this build is unclassed.
+# If return is empty, user should assume the implementation does not support
+# this compiler
+mpi_pkg_fc() { _mpi_pkg_compiler "MPI_FC"  "f90 fc"; }
 
-mpi_pkg_cc()  { _mpi_pkg_compiler "MPI_CC"  "cc";      }
-mpi_pkg_cxx() { _mpi_pkg_compiler "MPI_CXX" "cxx c++"; }
-mpi_pkg_f77() { _mpi_pkg_compiler "MPI_F77" "f77";     }
-mpi_pkg_fc()  { _mpi_pkg_compiler "MPI_FC"  "f90 fc";  }
-
+# @FUNCTION: mpi_pkg_f70
+# @RETURN: Full path to the mpi C compiler
+# @DESCRIPTION:
+# Trys to find a mpi C compiler, even if this build is unclassed. If return is empty, user should assume the implementation does not support
+# this compiler
+mpi_pkg_f77() { _mpi_pkg_compiler "MPI_F77"  "f77"; }
 
 # @FUNCTION:  mpi_pkg_set_ld_library_path
 # @USAGE:
-# @DESCRIPTION:  Adds the correct path(s) to the end of LD_LIBRARY_PATH.  Does
+# @DESCRIPTION:
+# Adds the correct path(s) to the end of LD_LIBRARY_PATH.  Does
 # nothing if the build is unclassed.
 mpi_pkg_set_ld_library_path() {
 	if mpi_classed; then
@@ -375,9 +380,15 @@ mpi_pkg_set_ld_library_path() {
 	fi
 }
 
+# @FUNCTION: _mpi_pkg_compiler
+# @USAGE: <class variable for compiler> <suffix for generic mpi## executable>
+# @DESCRIPTION:
+#
 # If classed, we can ask eselect-mpi.  Otherwise we'll look for some common
-# executable names in ${ROOT}usr/bin.
+# executable names in ${EROOT}usr/bin.
+#
 _mpi_pkg_compiler() {
+	[[ $# -lt 2 ]] && die "_mpi_pkg_compiler() requires at least two arguments"
 	if mpi_classed; then
 		echo "$(eselect mpi printvar $(mpi_class) ${1})"
 	else
@@ -385,8 +396,8 @@ _mpi_pkg_compiler() {
 		local p
 
 		for p in ${suffixes}; do
-			if [ -x ${ROOT}usr/bin/mpi${p} ]; then
-				echo "${ROOT}usr/bin/mpi${p}"
+			if [ -x "${EROOT}usr/bin/mpi${p}" ]; then
+				echo "${EROOT}usr/bin/mpi${p}"
 				break
 			fi
 		done
@@ -394,36 +405,39 @@ _mpi_pkg_compiler() {
 }
 
 # @FUNCTION: mpi_pkg_set_env
-# @USAGE:
 # @DESCRIPTION:
-# Exports 'some influential environment variables'.  CC, CXX, F77, FC
+#
+# Export Class specific build variables like CC, CXX, F77, FC, PKG_CONFIG_PATH
+#
 mpi_pkg_set_env() {
 	if mpi_classed; then
-		_mpi_oCC=$CC
-		_mpi_oCXX=$CXX
-		_mpi_oF77=$F77
-		_mpi_oFC=$FC
+		_mpi_oCC=${CC}
+		_mpi_oCXX=${CXX}
+		_mpi_oF77=${F77}
+		_mpi_oFC=${FC}
+		_mpi_oF90=${F90}
 		_mpi_oPCP=${PKG_CONFIG_PATH}
 		_mpi_oLLP=${LD_LIBRARY_PATH}
 		export CC=$(mpi_pkg_cc)
 		export CXX=$(mpi_pkg_cxx)
 		export F77=$(mpi_pkg_f77)
 		export FC=$(mpi_pkg_fc)
+		export F90=$(mpi_pkg_fc)
 		export PKG_CONFIG_PATH="$(mpi_root)$(get_libdir)/pkgconfig:${PKG_CONFIG_PATH}"
 		mpi_pkg_set_ld_library_path
 	fi
 }
 
 # @FUNCTION: mpi_pkg_restore_env
-# @USAGE:
 # @DESCRIPTION:
-# Attempts to undo the damage done by mpi_pkg_set_env
+# Attempts to undo the changes in enviroment done by mpi_pkg_set_env
 mpi_pkg_restore_env() {
 	if mpi_classed; then
 		export CC=${_mpi_oCC}
 		export CXX=${_mpi_oCXX}
 		export F77=${_mpi_oF77}
 		export FC=${_mpi_oFC}
+		export F90=${_mpi_oFC}
 		export PKG_CONFIG_PATH=${_mpi_oPCP}
 		export LD_LIBRARY_PATH=${_mpi_oLLP}
 	fi
@@ -431,7 +445,7 @@ mpi_pkg_restore_env() {
 
 # @FUNCTION: _get_eselect_var
 # @USAGE: VARIABLE
-# @RETURN: If classed, return VARIABLE content; empty otherwise
+# @RETURN: If classed, return VARIABLE content; otherwise empty
 # @INTERNAL
 # @DESCRIPTION:
 # Get variable for a class from the env.d file
