@@ -10,22 +10,28 @@ inherit multilib
 # Cluster Team <cluster@gentoo.org>
 # @AUTHOR:
 # Justin Bronder <jsbronder@gentoo.org>
+# @VCSURL: http://git.overlays.gentoo.org/gitweb/?p=proj/sci.git;a=history;f=eclass/mpi.eclass;hb=HEAD
 # @BLURB:  Common functions for mpi support in ebuilds
 
-# History:
-#	2009-06-26 (jsbronder):  Add ability to require common use flags.
-#		Remove dep on eselect-mpi (it's in sys-cluster/empi)
-#		Use virtual/$class to get imp dep in mpi_pkg_deplist.
-#	2008-11-20 (jsbronder):  Initial rewrite from old mpi.eclass
 
 #####################
 # Private Variables #
 #####################
 
+# @ECLASS-VARIABLE: __MPI_ALL_IMPLEMENTATION_PNS
+# @INTERNAL
+# @REQUIRED
+# @DESCRIPTION:
 # All known mpi implementations
-__MPI_ALL_IMPLEMENTATION_PNS="mpich mpich2 openmpi lam-mpi openib-mvapich2"
+__MPI_ALL_IMPLEMENTATION_PNS="lam-mpi mpich mpich2 openmpi openib-mvapich2"
+
+# @ECLASS-VARIABLE: __MPI_ALL_CLASSABLE_PNS
+# @INTERNAL
+# @REQUIRED
+# @DESCRIPTION:
 # All mpi implentations that can be classed.
-__MPI_ALL_CLASSABLE_PNS="mpich openmpi mpich2 lam-mpi"
+__MPI_ALL_CLASSABLE_PNS="lam-mpi mpich mpich2 openmpi"
+
 
 ###################################################################
 # Generic Functions that are used by Implementations and Packages #
@@ -38,7 +44,6 @@ __MPI_ALL_CLASSABLE_PNS="mpich openmpi mpich2 lam-mpi"
 # install.
 
 # @FUNCTION: mpi_classed
-# @USAGE:
 # @RETURN: True if this build is classed.
 # @DESCRIPTION:
 # Check if we are classed
@@ -47,7 +52,6 @@ mpi_classed() {
 }
 
 # @FUNCTION: mpi_class
-# @USAGE:
 # @RETURN: The name of the current class, or nothing if unclassed
 # @DESCRIPTION:
 # Get the class if the installaiton is classed
@@ -56,11 +60,10 @@ mpi_class() {
 }
 
 # @FUNCTION: mpi_root
-# @USAGE:
 # @RETURN: The root path that packages should be installed to.
 # @DESCRIPTION:
 # Query for the root path of the package. In the end, the majority of a package
-# will will install to ${EROOT}$(mpi_root).
+# will will install to $(mpi_root).
 mpi_root() {
 	if mpi_classed; then
 		echo "/usr/$(get_libdir)/mpi/$(mpi_class)/"
@@ -70,9 +73,10 @@ mpi_root() {
 }
 
 # @FUNCTION: mpi_econf_args
-# @USAGE:
-# @DESCRIPTION:  If classed, returns a list of arguments for econf that sets the
-# default install locations correctly.  Should be first in the list of arguments
+# @RETURN: If classed, a list of arguments for econf that sets the default install locations
+# @DESCRIPTION:
+# If classed, returns a list of arguments for econf that sets the
+# default install locations correctly. Should be first in the list of arguments
 # to econf so that any unsuitable options can be overwritten.
 mpi_econf_args() {
 	if mpi_classed; then
@@ -90,19 +94,11 @@ mpi_econf_args() {
 }
 
 # @FUNCTION: _mpi_do
-# @USAGE: $1 - Standard ebuild command to replicate.
-# @DESCRIPTION: Large wrapping class for all of the {do,new}* commands that need
-# to respect the new root to install to.  Works with unclassed builds as well.
-# Currently supports:
-# @CODE
-# dobin    newbin    dodoc     newdoc
-# doexe    newexe    dohtml    dolib
-# dolib.a  newlib.a  dolib.so  newlib.so
-# dosbin   newsbin   doman     newman
-# doinfo   dodir     dohard    doins
-# dosym
-# @CODE
-
+# @USAGE: <standard helper function>
+# @INTERNAL
+# @DESCRIPTION:
+# Large wrapping class for all of the {do,new}* commands that need
+# to respect the new root to install to. Works with unclassed builds as well.
 _mpi_do() {
 	local rc prefix d
 	local cmd=${1}
@@ -175,6 +171,22 @@ _mpi_do() {
 	[[ ${ran} -eq 0 ]] && die "mpi_do passed unknown command: ${cmd}"
 	return ${rc}
 }
+
+# @FUNCTION: mpi_do<standard helper function>
+# @USAGE: <standard helper function>
+# @DESCRIPTION:
+# Wrapper for standard ebuild helper functions like the {do,new}* commands that
+# need to respect the new root to install to. Works with unclassed builds as well.
+#
+# Currently supported <standard helper function>s are:
+# @CODE
+# dobin    newbin    dodoc     newdoc
+# doexe    newexe    dohtml    dolib
+# dolib.a  newlib.a  dolib.so  newlib.so
+# dosbin   newsbin   doman     newman
+# doinfo   dodir     dohard    doins
+# dosym
+# @CODE
 mpi_dobin()     { _mpi_do "dobin"        $*; }
 mpi_newbin()    { _mpi_do "newbin"       $*; }
 mpi_dodoc()     { _mpi_do "dodoc"        $*; }
@@ -338,7 +350,7 @@ mpi_pkg_base_imp() {
 	fi
 }
 
-# @FUNCTION: mpi_pkg_cc
+# @FUNCTION: mpi_pkg_<compiler>
 # @RETURN: Full path to the mpi C compiler
 # @DESCRIPTION:
 # Trys to find a mpi C compiler, even if this build is unclassed.
