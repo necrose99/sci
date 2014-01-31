@@ -12,6 +12,17 @@ inherit multilib
 # Justin Bronder <jsbronder@gentoo.org>
 # @VCSURL: http://git.overlays.gentoo.org/gitweb/?p=proj/sci.git;a=history;f=eclass/mpi.eclass;hb=HEAD
 # @BLURB:  Common functions for mpi support in ebuilds
+# @DESCRIPTION:
+# This eclass is intended to support classed installations of mpi
+# implementations in ebuilds. For extend description please visit:
+#
+# https://wiki.gentoo.org/....
+#
+# @EXAMPLE:
+#
+# inherit mpi
+#
+#
 
 
 #####################
@@ -22,6 +33,7 @@ inherit multilib
 # @INTERNAL
 # @REQUIRED
 # @DESCRIPTION:
+#
 # All known mpi implementations
 __MPI_ALL_IMPLEMENTATION_PNS="lam-mpi mpich mpich2 openmpi openib-mvapich2"
 
@@ -29,6 +41,7 @@ __MPI_ALL_IMPLEMENTATION_PNS="lam-mpi mpich mpich2 openmpi openib-mvapich2"
 # @INTERNAL
 # @REQUIRED
 # @DESCRIPTION:
+#
 # All mpi implentations that can be classed.
 __MPI_ALL_CLASSABLE_PNS="lam-mpi mpich mpich2 openmpi"
 
@@ -40,13 +53,14 @@ __MPI_ALL_CLASSABLE_PNS="lam-mpi mpich mpich2 openmpi"
 # @ECLASS-VARIABLE: MPI_UNCLASSED_DEP_STR
 # @DEFAULT_UNSET
 # @DESCRIPTION:
+#
 # String inserted into the deplist when not using a classed
 # install.
 
 # @FUNCTION: mpi_classed
 # @RETURN: True if this build is classed.
 # @DESCRIPTION:
-# Check if we are classed
+# Check if the current package is classed
 mpi_classed() {
 	[[ ${CATEGORY} == mpi-* ]]
 }
@@ -172,8 +186,7 @@ _mpi_do() {
 	return ${rc}
 }
 
-# @FUNCTION: mpi_do<standard helper function>
-# @USAGE: <standard helper function>
+# @FUNCTION: mpi_do<standard_helper_function>
 # @DESCRIPTION:
 # Wrapper for standard ebuild helper functions like the {do,new}* commands that
 # need to respect the new root to install to. Works with unclassed builds as well.
@@ -243,7 +256,7 @@ mpi_imp_add_eselect() {
 	cp "${FILESDIR}"/${MPI_ESELECT_FILE} ${T}/${c}.eselect || die
 	sed -i \
 		-e "s|@ROOT@|$(mpi_root)|g" \
-		-e "s|@LIBDIR@|$(get_libdir)|g" \
+	 	-e "s|@LIBDIR@|$(get_libdir)|g" \
 		-e "s|@BASE_IMP@|${PN}|g" \
 		${T}/${c}.eselect || die
 
@@ -257,26 +270,66 @@ mpi_imp_add_eselect() {
 ########################################
 
 # @ECLASS-VARIABLE: MPI_PKG_NEED_IMPS
-# @DESCRIPTION: List of package names (${PN}) that this package is compatible
-# with.  Default is the list of all mpi implementations
-MPI_PKG_NEED_IMPS="${MPI_PKG_NEED_IMPS:-${__MPI_ALL_CLASSABLE_PNS}}"
+# @DESCRIPTION:
+#
+# List of package names (${PN}) of mpi implementations that this package is
+# compatible with. Default is the list of all mpi implementations
+: ${MPI_PKG_NEED_IMPS:=${__MPI_ALL_CLASSABLE_PNS}}
+
+# @ECLASS-VARIABLE: MPI_REQ_USE
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+# The list of USEflags required to be enabled on the chosen mpi
+# implementations, formed as a USE-dependency string. It should match the
+# USE of virtual/mpi.
+#
+# This should be set before calling `inherit'.
+#
+# Example:
+# @CODE
+# MPI_REQ_USE="cxx,romio(-)?"
+# @CODE
+#
+# It will cause the mpi dependencies to look like:
+#
+# Unclassed installation:
+# @CODE
+# virtual/mpi[cxx,romio(-)?]
+# @CODE
+#
+# Classed installaion:
+# @CODE
+# sys-cluster/empi
+# virtual/mpi[cxx,romio(-)?]
+# @CODE
+
 
 
 # @ECLASS-VARIABLE: MPI_PKG_USE_CXX
-# @DESCRIPTION: Require a mpi implementation with c++ enabled.
-# This feature requires EAPI 2 style use dependencies
-MPI_PKG_USE_CXX="${MPI_PKG_USE_CXX:-0}"
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+#
+# Require a mpi implementation with c++ enabled.
+#
+# DEPRECATED varaible, please use MPI_REQ_USE
+
 
 # @ECLASS-VARIABLE: MPI_PKG_USE_FC
-# @DESCRIPTION: Require a mpi implementation with fortran enabled.
-# This feature requires EAPI 2 style use dependencies
-MPI_PKG_USE_FC="${MPI_PKG_USE_FC:-0}"
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+#
+# Require a mpi implementation with fortran enabled.
+#
+# DEPRECATED varaible, please use MPI_REQ_USE
 
 
 # @ECLASS-VARIABLE: MPI_PKG_USE_ROMIO
-# @DESCRIPTION: Require a mpi implementation with romio enabled.
-# This feature requires EAPI 2 style use dependencies
-MPI_PKG_USE_ROMIO="${MPI_PKG_USE_ROMIO:-0}"
+# @DEFAULT_UNSET
+# @DESCRIPTION:
+#
+# Require a mpi implementation with romio enabled.
+#
+# DEPRECATED varaible, please use MPI_REQ_USE
 
 
 # @FUNCTION: mpi_pkg_deplist
@@ -288,18 +341,20 @@ MPI_PKG_USE_ROMIO="${MPI_PKG_USE_ROMIO:-0}"
 mpi_pkg_deplist() {
 	local pn pn2 ver usedeps invalid_imps inval
 
-	case "${EAPI}" in
-		2|3|4)
-			[[ ${MPI_PKG_USE_CXX} -ne 0 ]] \
-				&& usedeps=",cxx"
-			[[ ${MPI_PKG_USE_FC} -ne 0 ]] \
-				&& usedeps="${use_deps},fortran"
-			[[ ${MPI_PKG_USE_ROMIO} -ne 0 ]] \
-				&& usedeps="${use_deps},romio"
-			;;
-		*)
-			;;
-	esac
+	if [[ ${MPI_REQ_USE} ]]; then
+		usedeps=${MPI_REQ_USE}
+	else
+		[[ -n ${MPI_PKG_USE_CXX} ]] && usedeps+=" cxx"
+		[[ -n ${MPI_PKG_USE_FC} ]] && usedeps+=" fortran"
+		[[ -n ${MPI_PKG_USE_ROMIO} ]] && usedeps+=" romio"
+
+		if [[ -n "${usedeps}" ]] ; then
+			eqawarn "This ebuild is using a deprecated way of setting USE deps"
+			eqawarn "Please report a bug at https:bugs.gentoo.org"
+
+			usedeps=${usedeps/ /,}
+		fi
+	fi
 
 	if mpi_classed; then
 		ver="sys-cluster/empi virtual/$(mpi_class)"
@@ -307,12 +362,12 @@ mpi_pkg_deplist() {
 		ver="virtual/mpi"
 	fi
 
-	if [ -n "${usedeps}" ]; then
-		ver="${ver}[${usedeps:1}]"
+	if [[ -n "${usedeps}" ]]; then
+		ver+="[${usedeps:1}]"
 	fi
 
 	if ! mpi_classed && [ -n "${MPI_UNCLASSED_DEP_STR}" ]; then
-		ver="${ver} ${MPI_UNCLASSED_DEP_STR}"
+		ver+=" ${MPI_UNCLASSED_DEP_STR}"
 	fi
 
 	for pn in ${__MPI_ALL_IMPLEMENTATION_PNS}; do
@@ -324,7 +379,7 @@ mpi_pkg_deplist() {
 			fi
 		done
 		[[ ${inval} -eq 1 ]] \
-			&& invalid_imps="${invalid_imps} ${pn}"
+			&& invalid_imps+=" ${pn}"
 	done
 
 	for pn in ${inval_imps}; do
@@ -350,39 +405,7 @@ mpi_pkg_base_imp() {
 	fi
 }
 
-# @FUNCTION: mpi_pkg_<compiler>
-# @RETURN: Full path to the mpi C compiler
-# @DESCRIPTION:
-# Trys to find a mpi C compiler, even if this build is unclassed.
-# If return is empty, user should assume the implementation does not support
-# this compiler
-mpi_pkg_cc() { _mpi_pkg_compiler "MPI_CC"  "cc"; }
-
-# @FUNCTION: mpi_pkg_cxx
-# @RETURN: Full path to the mpi C++ compiler
-# @DESCRIPTION:
-# Trys to find a mpi C++ compiler, even if this build is unclassed.
-# If return is empty, user should assume the implementation does not support
-# this compiler
-mpi_pkg_cxx() { _mpi_pkg_compiler "MPI_CXX"  "cxx"; }
-
-# @FUNCTION: mpi_pkg_fc
-# @RETURN: Full path to the mpi F90 compiler
-# @DESCRIPTION:
-# Trys to find a mpi F90 compiler, even if this build is unclassed.
-# If return is empty, user should assume the implementation does not support
-# this compiler
-mpi_pkg_fc() { _mpi_pkg_compiler "MPI_FC"  "f90 fc"; }
-
-# @FUNCTION: mpi_pkg_f70
-# @RETURN: Full path to the mpi C compiler
-# @DESCRIPTION:
-# Trys to find a mpi C compiler, even if this build is unclassed. If return is empty, user should assume the implementation does not support
-# this compiler
-mpi_pkg_f77() { _mpi_pkg_compiler "MPI_F77"  "f77"; }
-
 # @FUNCTION:  mpi_pkg_set_ld_library_path
-# @USAGE:
 # @DESCRIPTION:
 # Adds the correct path(s) to the end of LD_LIBRARY_PATH.  Does
 # nothing if the build is unclassed.
@@ -394,6 +417,7 @@ mpi_pkg_set_ld_library_path() {
 
 # @FUNCTION: _mpi_pkg_compiler
 # @USAGE: <class variable for compiler> <suffix for generic mpi## executable>
+# @INTERNAL
 # @DESCRIPTION:
 #
 # If classed, we can ask eselect-mpi.  Otherwise we'll look for some common
@@ -415,6 +439,24 @@ _mpi_pkg_compiler() {
 		done
 	fi
 }
+
+# @FUNCTION: mpi_pkg_<compiler>
+# @RETURN: Full path to the mpi version of <compiler>
+# @DESCRIPTION:
+#
+# Trys to find a mpi version of <compiler>, even if this build is unclassed.
+# If return is empty, user should assume the implementation does not support
+# this compiler
+#
+# Currently supported <compiler> are
+# @CODE
+# cc cxx f90 fc f77
+# @CODE
+mpi_pkg_cc()  { _mpi_pkg_compiler "MPI_CC"  "cc"     ; }
+mpi_pkg_cxx() { _mpi_pkg_compiler "MPI_CXX" "cxx"    ; }
+mpi_pkg_fc()  { _mpi_pkg_compiler "MPI_FC"  "f90 fc" ; }
+mpi_pkg_f90() { _mpi_pkg_compiler "MPI_F90" "f90 fc" ; }
+mpi_pkg_f77() { _mpi_pkg_compiler "MPI_F77" "f77"    ; }
 
 # @FUNCTION: mpi_pkg_set_env
 # @DESCRIPTION:
@@ -466,3 +508,8 @@ _get_eselect_var() {
 		echo "$(eselect mpi printvar $(mpi_class) ${1} 2>/dev/null)"
 	fi
 }
+
+case "${EAPI:-0}" in
+	0|1|2|3) die "EAPI=${EAPI} is not supported" ;;
+esac
+
