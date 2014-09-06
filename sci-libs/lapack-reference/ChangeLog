@@ -2,6 +2,10 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: /var/cvsroot/gentoo-x86/sci-libs/lapack-reference/ChangeLog,v 1.51 2010/10/02 20:49:51 grobian Exp $
 
+  26 Apr 2014; Mark Wright <gienah@gentoo.org> lapack-reference-9999.ebuild:
+  Add >=virtual/blas-2.1-r2[int64?] and >=virtual/lapack-3.5-r2[int64?] to
+  RDEPEND. Use separate eselect modules for lapack and lapack-int64.
+
   18 Feb 2014; Mark Wright <gienah@gentoo.org> lapack-reference-9999.ebuild,
   metadata.xml:
   multibuild lapack-reference when USE=int64 and/or USE=static is specified.
