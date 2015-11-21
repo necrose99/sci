@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-inherit cmake-utils java-utils-2
+inherit cmake-utils java-pkg-2
 
 DESCRIPTION="Analysis of residual dipolar couplings (RDCs) for structure validation and elucidation"
 HOMEPAGE="http://ifestos.cse.sc.edu/software.php"
@@ -17,7 +17,7 @@ IUSE=""
 
 RDEPEND="
 	dev-cpp/eigen:3
-	dev-lang/tcl
+	dev-lang/tcl:*
 	dev-tcltk/bwidget
 	virtual/jdk:1.7
 	"
@@ -39,6 +39,8 @@ src_prepare() {
 	sed \
 		-e '/BWidget/s:1.9.4:1.9.7:g' \
 		-i scripts/REDCAT.tcl || die
+	cmake-utils_src_prepare
+	java-pkg-2_src_prepare
 }
 
 src_install() {

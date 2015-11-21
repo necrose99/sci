@@ -1,6 +1,21 @@
 # ChangeLog for sci-libs/p4est
-# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
-# $Header: $
+# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
+# $Id$
+
+  06 Jun 2015; Justin Lecher <jlec@gentoo.org> p4est-1.0.ebuild:
+  sci-libs/p4est: Add SLOT operators
+
+  06 Jun 2015; Justin Lecher <jlec@gentoo.org> metadata.xml:
+  sci-libs/p4est: Add github to remote-id in metadata.xml
+
+  13 Oct 2014; Matthias Maier <tamiko@gentoo.org> p4est-1.0.ebuild:
+  sci-libs/p4est: Fix build dependencies
+
+*p4est-1.1 (13 Oct 2014)
+
+  13 Oct 2014; Matthias Maier <tamiko@gentoo.org> +p4est-1.1.ebuild,
+  metadata.xml, p4est-1.0.ebuild:
+  sci-libs/p4est: Version bump; update metadata.xml
 
   17 Sep 2014; Christoph Junghans <ottxor@gentoo.org>
   -files/p4est-0.3.4.2-libtool-fix.patch,

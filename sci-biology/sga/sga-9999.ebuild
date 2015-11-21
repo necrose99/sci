@@ -1,12 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-inherit eutils
-
-[ "$PV" == "9999" ] && inherit git-2
+inherit eutils git-r3
 
 DESCRIPTION="String Graph Assembler for short-read assemblies"
 HOMEPAGE="https://github.com/jts/sga"
@@ -27,13 +25,13 @@ RDEPEND="${DEPEND}"
 
 src_configure(){
 	cd src || die
-	./autogen.sh
+	./autogen.sh || die
 	econf --with-bamtools=/usr
 }
 
 src_compile(){
 	cd src || die
-	emake
+	default
 }
 
 src_install(){

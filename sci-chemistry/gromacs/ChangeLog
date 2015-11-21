@@ -1,6 +1,35 @@
 # ChangeLog for sci-chemistry/gromacs
-# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
-# $Header: $
+# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
+# $Id$
+
+*gromacs-5.1.9999 (20 Aug 2015)
+
+  20 Aug 2015; Christoph Junghans <ottxor@gentoo.org> +gromacs-5.1.9999.ebuild:
+  sci-chemistry/gromacs: version bump
+
+  21 Jun 2015; Christoph Junghans <ottxor@gentoo.org> gromacs-5.0.9999.ebuild:
+  sync with gx86
+
+  16 Jun 2015; Alexey Shvetsov <alexxy@gentoo.org> gromacs-9999.ebuild:
+  Drop unneeded hack
+
+  08 Mar 2015; Christoph Junghans <ottxor@gentoo.org> gromacs-4.6.9999.ebuild,
+  metadata.xml:
+  removed openmm build
+
+  31 Jan 2015; Christoph Junghans <ottxor@gentoo.org> gromacs-4.6.9999.ebuild,
+  gromacs-5.0.9999.ebuild, gromacs-9999.ebuild, metadata.xml:
+  Switch to CPU_FLAGS_X86 (bug #538268)
+
+  21 Dec 2014; Christoph Junghans <ottxor@gentoo.org> gromacs-5.0.9999.ebuild:
+  sync with gx86
+
+  25 Nov 2014; Christoph Junghans <ottxor@gentoo.org> gromacs-4.6.9999.ebuild,
+  gromacs-5.0.9999.ebuild, gromacs-9999.ebuild:
+  fixed a typo preventing AVX2 support (bug #530454)
+
+  09 Oct 2014; Alexey Shvetsov <alexxy@gentoo.org> gromacs-9999.ebuild:
+  Fix doc install
 
   07 Sep 2014; Christoph Junghans <ottxor@gentoo.org> gromacs-5.0.9999.ebuild:
   fix completion install

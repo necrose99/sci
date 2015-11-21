@@ -1,10 +1,10 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit toolchain-funcs python-any-r1
 
@@ -36,6 +36,7 @@ DEPEND="
 	"
 
 src_compile() {
+	sed -i '/^\t@/s/@//' Makefile || die #make all slient commands ("@") verbose
 	emake LDFLAGS="${LDFLAGS}" OPT="${CXXFLAGS}" CXX="$(tc-getCXX)" CPP="$(tc-getCPP)"
 }
 

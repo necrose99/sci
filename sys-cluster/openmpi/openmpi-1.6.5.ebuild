@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -57,15 +57,15 @@ MPI_UNCLASSED_DEP_STR="
 RDEPEND="
 	>=sys-apps/hwloc-1.3
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
-	openmpi_fabrics_dapl? ( sys-infiniband/dapl )
-	openmpi_fabrics_ofed? ( sys-infiniband/ofed )
+	openmpi_fabrics_dapl? ( sys-infiniband/dapl:* )
+	openmpi_fabrics_ofed? ( sys-infiniband/ofed:* )
 	openmpi_fabrics_knem? ( sys-cluster/knem )
 	openmpi_fabrics_open-mx? ( sys-cluster/open-mx )
-	openmpi_fabrics_psm? ( sys-infiniband/infinipath-psm )
+	openmpi_fabrics_psm? ( sys-infiniband/infinipath-psm:* )
 	openmpi_fabrics_sctp? ( net-misc/lksctp-tools )
 	openmpi_rm_pbs? ( sys-cluster/torque )
 	openmpi_rm_slurm? ( sys-cluster/slurm )
-	openmpi_ofed_features_rdmacm? ( sys-infiniband/librdmacm )
+	openmpi_ofed_features_rdmacm? ( sys-infiniband/librdmacm:* )
 	$(mpi_imp_deplist)"
 DEPEND="${RDEPEND}"
 
@@ -147,10 +147,10 @@ src_configure() {
 }
 
 src_install () {
-	emake DESTDIR="${D}" install || die "make install failed"
+	default
 	# From USE=vt see #359917
 	rm "${ED}"/$(mpi_root)/usr/share/libtool &> /dev/null
-	mpi_dodoc README AUTHORS NEWS VERSION || die
+	mpi_dodoc README AUTHORS NEWS VERSION
 	mpi_imp_add_eselect
 }
 
@@ -158,5 +158,5 @@ src_test() {
 	# Doesn't work with the default src_test as the dry run (-n) fails.
 
 	# Do not override malloc during build.  Works around #462602
-	emake -j1 check || die "emake check failed"
+	emake -j1 check
 }

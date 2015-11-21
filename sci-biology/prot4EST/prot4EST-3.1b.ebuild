@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -19,8 +19,8 @@ IUSE=""
 DEPEND="sci-biology/emboss
 	sci-biology/estscan
 	sci-biology/bioperl
-	perl-core/File-Path
-	perl-core/Getopt-Long
+	virtual/perl-File-Path
+	virtual/perl-Getopt-Long
 	dev-perl/Statistics-Descriptive
 	dev-perl/Tie-IxHash"
 	#dev-perl/Algorithm-Loops

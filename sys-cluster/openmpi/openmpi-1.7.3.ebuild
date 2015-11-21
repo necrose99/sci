@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -57,13 +57,13 @@ RDEPEND="
 	dev-libs/libevent
 	>=sys-apps/hwloc-1.3
 	elibc_FreeBSD? ( dev-libs/libexecinfo )
-	openmpi_fabrics_ofed? ( sys-infiniband/ofed )
+	openmpi_fabrics_ofed? ( sys-infiniband/ofed:* )
 	openmpi_fabrics_knem? ( sys-cluster/knem )
 	openmpi_fabrics_open-mx? ( sys-cluster/open-mx )
-	openmpi_fabrics_psm? ( sys-infiniband/infinipath-psm )
+	openmpi_fabrics_psm? ( sys-infiniband/infinipath-psm:* )
 	openmpi_rm_pbs? ( sys-cluster/torque )
 	openmpi_rm_slurm? ( sys-cluster/slurm )
-	openmpi_ofed_features_rdmacm? ( sys-infiniband/librdmacm )
+	openmpi_ofed_features_rdmacm? ( sys-infiniband/librdmacm:* )
 	$(mpi_imp_deplist)"
 DEPEND="${RDEPEND}"
 
@@ -142,12 +142,12 @@ src_configure() {
 }
 
 src_install () {
-	emake DESTDIR="${D}" install
+	default
 	# From USE=vt see #359917
 	rm "${ED}"/$(mpi_root)/usr/share/libtool &> /dev/null
 	# Avoid collisions with libevent
 	rm -rf "${ED}"/$(mpi_root)/usr/include/event2 &> /dev/null
-	mpi_dodoc README AUTHORS NEWS VERSION || die
+	mpi_dodoc README AUTHORS NEWS VERSION
 	mpi_imp_add_eselect
 }
 

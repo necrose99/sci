@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -15,15 +15,11 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=""
+DEPEND="dev-lang/perl"
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"
 
-src_prepare(){
-	cp -p "${DISTDIR}"/velvetk.pl . || die
-}
-
 src_install(){
-	dobin velvetk.pl
+	dobin "${DISTDIR}"/velvetk.pl
 }

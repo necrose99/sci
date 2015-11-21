@@ -1,12 +1,12 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
 AUTOTOOLS_AUTORECONF=true
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit autotools-utils distutils-r1 subversion
 

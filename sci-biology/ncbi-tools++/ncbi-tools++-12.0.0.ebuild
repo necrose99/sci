@@ -1,10 +1,12 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-inherit eutils flag-o-matic multilib toolchain-funcs
+PYTHON_COMPAT=( python2_7 )
+
+inherit eutils flag-o-matic multilib python-single-r1 toolchain-funcs
 
 MY_TAG="Jun_15_2010"
 MY_Y="${MY_TAG/*_/}"
@@ -12,6 +14,7 @@ MY_PV="12_0_0"
 MY_P="ncbi_cxx--${MY_PV}"
 #ftp://ftp.ncbi.nlm.nih.gov/toolbox/ncbi_tools++/ARCHIVE/9_0_0/ncbi_cxx--9_0_0.tar.gz
 
+# for example sci-biology/ncbi-tools++-12.0.0 contains blastn-2.2.28+
 DESCRIPTION="NCBI C++ Toolkit, including NCBI BLAST+"
 HOMEPAGE="http://www.ncbi.nlm.nih.gov/books/bv.fcgi?rid=toolkit"
 SRC_URI="
@@ -29,15 +32,18 @@ IUSE="
 	glut gnutls hdf5 icu jpeg lzo mesa mysql muparser opengl pcre png python
 	sablotron sqlite sqlite3 tiff xerces xalan xml xpm xslt X"
 #KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-KEYWORDS=""
+KEYWORDS="~amd64"
+
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 # sys-libs/db should be compiled with USE=cxx
 DEPEND="
 	!sci-biology/sra_sdk
+	app-arch/cpio
 	berkdb? ( sys-libs/db:4.3[cxx] )
 	boost? ( dev-libs/boost )
 	curl? ( net-misc/curl )
-	sqlite? ( dev-db/sqlite )
+	sqlite? ( dev-db/sqlite:0 )
 	sqlite3? ( dev-db/sqlite:3 )
 	mysql? ( virtual/mysql )
 	fltk? ( x11-libs/fltk )
@@ -47,7 +53,7 @@ DEPEND="
 	freetype? ( media-libs/freetype )
 	fastcgi? ( www-apache/mod_fastcgi )
 	gnutls? ( net-libs/gnutls )
-	python? ( dev-lang/python )
+	python? ( ${PYTHON_DEPS} )
 	cppunit? ( dev-util/cppunit )
 	icu? ( dev-libs/icu )
 	expat? ( dev-libs/expat )
@@ -57,11 +63,11 @@ DEPEND="
 	xerces? ( dev-libs/xerces-c )
 	xalan? ( dev-libs/xalan-c )
 	muparser? ( dev-cpp/muParser )
-	hdf5? ( sci-libs/hdf5 )
+	hdf5? ( sci-libs/hdf5[cxx] )
 	gif? ( media-libs/giflib )
-	jpeg? ( virtual/jpeg )
-	png? ( media-libs/libpng )
-	tiff? ( media-libs/tiff )
+	jpeg? ( virtual/jpeg:0= )
+	png? ( media-libs/libpng:0= )
+	tiff? ( media-libs/tiff:0= )
 	xpm? ( x11-libs/libXpm )
 	dev-libs/lzo
 	app-arch/bzip2
@@ -115,6 +121,7 @@ src_prepare() {
 		"${FILESDIR}"/${P}-configure.patch
 		"${FILESDIR}"/${P}-drop-STATIC-from-LIB.patch
 		"${FILESDIR}"/${P}-fix-install.patch
+		"${FILESDIR}"/${P}-bdb6.patch
 		)
 #       "${FILESDIR}"/${P}-as-needed.patch
 #       "${FILESDIR}"/${P}-fix-creaders-linking.patch
@@ -212,7 +219,6 @@ src_configure() {
 #	--with-included-sss
 	--with-z="${EPREFIX}/usr"
 	--with-bz2="${EPREFIX}/usr"
-	--with-muparser="${EPREFIX}/usr"
 	--without-sybase
 	--with-autodep
 #	--with-3psw=std:netopt favor standard (system) builds of the above pkgs
@@ -222,13 +228,14 @@ src_configure() {
 	$(use_with static-libs static)
 	$(use_with static static-exe)
 	$(use_with threads mt)
-	$(use_with prefix runpath "${EPREFIX}/usr/$(get_libdir)/ncbi_cxx")
+	$(use_with prefix runpath "${EPREFIX}/usr/$(get_libdir)/${PN}")
 	$(use_with test check)
 	$(use_with pch)
 	$(use_with lzo lzo "${EPREFIX}/usr")
 	$(use_with pcre pcre "${EPREFIX}/usr")
 	$(use_with gnutls gnutls "${EPREFIX}/usr")
 	$(use_with mysql mysql "${EPREFIX}/usr")
+	$(use_with muparser muparser "${EPREFIX}/usr")
 	$(usex fltk --with-fltk="${EPREFIX}/usr" "")
 	$(use_with opengl opengl "${EPREFIX}/usr")
 	$(use_with mesa mesa "${EPREFIX}/usr")

@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="2"
+EAPI=5
 
 inherit eutils
 
@@ -13,24 +13,20 @@ SRC_URI="http://mgarland.org/dist/${P}.tar.gz"
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
-
-RDEPEND=""
-DEPEND="${RDEPEND}"
+IUSE="static-libs"
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PV}-gcc4.3.patch
 }
 
 src_compile() {
-	cd src
-	emake || die
+	cd src || die
+	default
 }
 
 src_install() {
-	dolib.a src/*.a ||die
-	insinto /usr/include/
-	doins include/gfx/gfx.h || die
+	use static-libs && dolib.a src/*.a
+	doheader include/gfx/gfx.h
 
-	dohtml doc/* || die
+	dohtml doc/*
 }

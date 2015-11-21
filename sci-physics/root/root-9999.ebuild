@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sci-physics/root/root-5.34.18-r1.ebuild,v 1.3 2014/03/27 18:51:54 bicatali Exp $
+# $Id$
 
 EAPI=5
 
@@ -14,7 +14,7 @@ else
 	S="${WORKDIR}/${PN}"
 fi
 
-PYTHON_COMPAT=( python2_{6,7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit elisp-common eutils fdo-mime fortran-2 multilib python-single-r1 \
 	toolchain-funcs user versionator
@@ -93,7 +93,7 @@ CDEPEND="
 		mysql? ( virtual/mysql )
 		odbc? ( || ( dev-db/libiodbc:0= dev-db/unixODBC:0= ) )
 		oracle? ( dev-db/oracle-instantclient-basic:0= )
-		postgres? ( dev-db/postgresql-base:= )
+		postgres? ( dev-db/postgresql:= )
 		pythia6? ( sci-physics/pythia:6= )
 		pythia8? ( >=sci-physics/pythia-8.1.80:8= )
 		python? ( ${PYTHON_DEPS} )
@@ -128,10 +128,10 @@ PDEPEND="doc? ( ~app-doc/root-docs-${PV}[http=,math=] )"
 DOC_DIR="/usr/share/doc/${P}"
 
 die_compiler() {
-	die "Need one of the following C++11 capable compilers:"
-	die "    >=sys-devel/gcc[cxx]-4.8"
-	die "    >=sys-devel/clang-3.4"
-	die "    >=dev-lang/icc-13"
+	die "Need one of the following C++11 capable compilers:"\
+		"    >=sys-devel/gcc[cxx]-4.8"\
+		"    >=sys-devel/clang-3.4"\
+		"    >=dev-lang/icc-13"
 }
 
 pkg_setup() {
@@ -195,12 +195,9 @@ src_prepare() {
 		"${FILESDIR}"/${PN}-5.32.00-cfitsio.patch \
 		"${FILESDIR}"/${PN}-5.32.00-chklib64.patch \
 		"${FILESDIR}"/${PN}-5.34.13-unuran.patch \
-		"${FILESDIR}"/${PN}-5.34.13-desktop.patch \
 		"${FILESDIR}"/${PN}-6.00.01-dotfont.patch \
-		"${FILESDIR}"/${PN}-6.00.01-nobyte-compile.patch \
-		"${FILESDIR}"/${PN}-6.00.01-prop-flags.patch \
-		"${FILESDIR}"/${PN}-6.00.01-llvm.patch \
-		"${FILESDIR}"/${PN}-6.00.01-geocad.patch
+		"${FILESDIR}"/${PN}-6.06.00-nobyte-compile.patch \
+		"${FILESDIR}"/${PN}-6.00.01-llvm.patch
 
 	# make sure we use system libs and headers
 	rm montecarlo/eg/inc/cfortran.h README/cfortran.doc || die
@@ -213,7 +210,7 @@ src_prepare() {
 	LANG=C LC_ALL=C find core/zip -type f -name "[a-z]*" -print0 | \
 		xargs -0 rm || die
 	rm -r core/lzma/src/*.tar.gz || die
-	rm graf3d/gl/{inc,src}/gl2ps.* || die
+	rm graf3d/gl/src/gl2ps.* || die
 	sed -i -e 's/^GLLIBS *:= .* $(OPENGLLIB)/& -lgl2ps/' \
 		graf3d/gl/Module.mk || die
 
@@ -299,6 +296,8 @@ src_configure() {
 			--enable-soversion
 			--enable-table
 			--fail-on-missing
+			--cflags='${CFLAGS}'
+			--cxxflags='${CXXFLAGS}'
 			$(use_enable X x11)
 			$(use_enable X asimage)
 			$(use_enable X xft)
@@ -308,6 +307,7 @@ src_configure() {
 			$(use_enable fftw fftw3)
 			$(use_enable geocad)
 			$(use_enable graphviz gviz)
+			$(use_enable http)
 			$(use_enable kerberos krb5)
 			$(use_enable ldap)
 			$(use_enable math genvector)
@@ -320,6 +320,8 @@ src_configure() {
 			$(use_enable math vdt)
 			$(use_enable math unuran)
 			$(use_enable mysql)
+			$(usex mysql \
+				"--with-mysql-incdir=${EPREFIX}/usr/include/mysql" "")
 			$(use_enable odbc)
 			$(use_enable opengl)
 			$(use_enable oracle)
@@ -395,7 +397,8 @@ cleanup_install() {
 }
 
 src_install() {
-	emake DESTDIR="${D}" install
+	DOCS=($(find README/* -maxdepth 1 -type f))
+	default
 	dodoc README.md
 
 	echo "LDPATH=${EPREFIX%/}/usr/$(get_libdir)/root" > 99root

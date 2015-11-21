@@ -1,8 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="2"
+EAPI=5
+
+inherit scons-utils
 
 MY_P="FRAMEWAVE_${PV}_SRC"
 
@@ -26,12 +28,12 @@ src_prepare() {
 }
 
 src_compile() {
-	cd Framewave
+	cd Framewave || die
 
 	local bits="32"
 	use amd64 && bits="64"
 
-	scons \
+	escons \
 		CCFLAGS="${CFLAGS}" bitness="${bits}" variant="release" \
 		libtype="shared" ${MAKEOPTS}|| die "make failed"
 }
@@ -40,8 +42,7 @@ src_install() {
 	local bits="32"
 	use amd64 && bits="64"
 
-	dolib.so Framewave/build/bin/release_shared_${bits}/*.so* || die "doins failed"
+	dolib.so Framewave/build/bin/release_shared_${bits}/*.so*
 
-	insinto /usr/include
-	doins Framewave/build/include/* || die "doins failed"
+	doheader Framewave/build/include/*
 }

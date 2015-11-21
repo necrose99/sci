@@ -1,6 +1,69 @@
 # ChangeLog for sci-mathematics/scilab
-# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
-# $Header: $
+# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
+# $Id$
+
+*scilab-5.5.2-r1 (01 Sep 2015)
+
+  01 Sep 2015; Bryan Gardiner <bog@khumba.net> -scilab-5.5.2.ebuild,
+  +scilab-5.5.2-r1.ebuild:
+  Add PaX mark required for Java binaries on hardened.
+
+  29 Jul 2015; Bryan Gardiner <bog@khumba.net> scilab-5.5.2.ebuild:
+  Fix the conditions under which batik is a dependency: it's required for the
+  GUI to do graphic export at runtime as well as to build documentation.
+
+  25 Jul 2015; Bryan Gardiner <bog@khumba.net> scilab-5.5.2.ebuild,
+  +files/scilab-5.5.2-batik-1.8.patch, +files/scilab-5.5.2-fop-2.0.patch,
+  +files/scilab-5.5.2-xmlgraphics-common-2.0.patch:
+  Patch Scilab to build with new versions of Java dependencies.
+
+  22 Jul 2015; Marius Brehler <marbre@linux.sungazer.de> scilab-5.5.2.ebuild:
+  sci-mathematics/scilab: Fix deps
+
+  08 Jul 2015; Marius Brehler <marbre@linux.sungazer.de> scilab-5.5.2.ebuild:
+  sci-mathematics/scilab: Blind fixing dependencies
+
+  22 Jun 2015; Justin Lecher <jlec@gentoo.org>
+  -files/scilab-5.5.0-accessviolation.patch,
+  -files/scilab-5.5.0-fix-random-runtime-failure.patch,
+  -files/scilab-5.5.0-followlinks.patch, -files/scilab-5.5.0-gluegen.patch,
+  -files/scilab-5.5.0-java-heap.patch, -files/scilab-5.5.0-jdk1.8.patch,
+  -files/scilab-5.5.0-nogui.patch, -files/scilab-5.5.1-accessviolation.patch,
+  -files/scilab-5.5.1-fix-random-runtime-failure.patch,
+  -files/scilab-5.5.1-followlinks.patch, -files/scilab-5.5.1-gluegen.patch,
+  -files/scilab-5.5.1-java-heap.patch, -files/scilab-5.5.1-missinglib.patch,
+  -files/scilab-5.5.1-nogui.patch, -scilab-5.5.0.ebuild, -scilab-5.5.1.ebuild,
+  metadata.xml, scilab-5.5.2.ebuild:
+  sci-mathematics/scilab: Fix SLOT version of batik
+
+*scilab-5.5.2 (03 Apr 2015)
+
+  03 Apr 2015; Guillaume Horel <guillaume.horel@gmail.com>
+  +files/scilab-5.5.2-accessviolation.patch,
+  +files/scilab-5.5.2-fix-random-runtime-failure.patch,
+  +files/scilab-5.5.2-followlinks.patch, +files/scilab-5.5.2-gluegen.patch,
+  +files/scilab-5.5.2-java-heap.patch, +files/scilab-5.5.2-missinglib.patch,
+  +files/scilab-5.5.2-nogui.patch, +scilab-5.5.2.ebuild:
+  sci-mathematics/scilab: version bump
+
+  01 Feb 2015; Guillaume Horel <guillaume.horel@gmail.com> scilab-5.5.1.ebuild:
+  sci-mathematics/scilab: more precise dependencies
+
+  27 Jan 2015; Guillaume Horel <guillaume.horel@gmail.com>
+  -files/scilab-5.3.3-as-needed.patch, -files/scilab-5.3.3-blas-libs.patch,
+  -files/scilab-5.3.3-disable-build-help.patch,
+  -files/scilab-5.3.3-fix-random-runtime-failures.patch,
+  -files/scilab-5.3.3-fortran-link.patch, -files/scilab-5.3.3-gui-no-xcos.patch,
+  -files/scilab-5.3.3-hdf18.patch, -files/scilab-5.3.3-java-heap.patch,
+  -files/scilab-5.3.3-java-version-check.patch,
+  -files/scilab-5.3.3-javadoc-utf8.patch, -files/scilab-5.3.3-jgrapx-min.patch,
+  -files/scilab-5.3.3-jvm-detection.patch, -files/scilab-5.3.3-matio15.patch,
+  -files/scilab-5.3.3-no-lhpi.patch, -files/scilab-5.3.3-no-xcos-deps.patch,
+  -files/scilab-5.4.1-fix-random-runtime-failure.patch,
+  -files/scilab-5.4.1-followlinks.patch, -files/scilab-5.4.1-gluegen.patch,
+  -files/scilab-5.4.1-java-heap.patch, -scilab-5.3.3-r2.ebuild,
+  -scilab-5.4.1.ebuild:
+  sci-mathematics/scilab: remove old versions
 
   29 Jun 2014; Guillaume Horel <guillaume.horel@gmail.com>
   +files/scilab-5.5.0-jdk1.8.patch, scilab-5.5.0.ebuild:

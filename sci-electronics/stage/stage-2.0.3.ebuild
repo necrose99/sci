@@ -1,12 +1,12 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="3"
+EAPI=5
 
 inherit autotools eutils
 
-DESCRIPTION="2D multiple-robot simulator."
+DESCRIPTION="2D multiple-robot simulator"
 HOMEPAGE="http://playerstage.sourceforge.net/index.php?src=stage"
 SRC_URI="mirror://sourceforge/playerstage/stage-${PV}.tar.bz2"
 
@@ -37,25 +37,25 @@ src_configure() {
 }
 
 src_compile() {
-	emake || die "emake failed"
+	default
 
 	if use doc; then
 		pushd docsrc
 		doxygen -u stage.dox || die "doxygen failed"
-		touch header.html
-		emake "doc" || die "emake doc failed"
+		touch header.html || die
+		emake "doc"
 		popd
 	fi
 }
 
 src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
+	default
 
 	if use doc; then
 		pushd docsrc
-		emake DESTDIR="${D}" "doc-install" || die "emake doc-install failed"
+		emake DESTDIR="${D}" "doc-install"
 		popd
 	fi
 
-	dodoc AUTHORS ChangeLog NEWS README || die
+	dodoc AUTHORS ChangeLog NEWS README
 }

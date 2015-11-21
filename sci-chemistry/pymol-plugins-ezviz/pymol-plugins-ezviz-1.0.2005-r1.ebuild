@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -51,6 +51,6 @@ src_install() {
 		python_domodule *.gif
 	}
 	python_foreach_impl installation
-	python_parallel_foreach_impl python_optimize
+	python_foreach_impl python_optimize
 	dodoc readme.txt
 }

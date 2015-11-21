@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -20,9 +20,8 @@ IUSE="+gpc sdl static-libs +truetype +X"
 
 # preffer X with enabled xcb, really
 RDEPEND="
-	sdl? ( >=media-libs/libsdl-1.2.0 )
-	X? ( || (  <x11-libs/libX11-1.3.99.901[xcb]
-			  >=x11-libs/libX11-1.3.99.901 ) )
+	sdl? ( >=media-libs/libsdl-1.2.0[X?] )
+	X? ( >=x11-libs/libX11-1.3.99.901 )
 	truetype? ( media-libs/freetype:2 )
 "
 DEPEND="${RDEPEND}

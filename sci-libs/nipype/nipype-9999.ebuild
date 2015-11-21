@@ -1,12 +1,13 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
 # pyamg missing py3 support
 # PYTHON_COMPAT=( python{2_6,2_7,3_2,3_3} )
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
+PYTHON_REQ_USE="sqlite"
 
 inherit distutils-r1 git-r3
 
@@ -21,9 +22,10 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="
+	dev-python/future[${PYTHON_USEDEP}]
 	dev-python/setuptools[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
-	>=sci-libs/nibabel-1.2[${PYTHON_USEDEP}]"
+	sci-libs/nibabel[${PYTHON_USEDEP}]"
 RDEPEND="
 	sci-libs/scipy[${PYTHON_USEDEP}]
 	dev-python/traits[${PYTHON_USEDEP}]

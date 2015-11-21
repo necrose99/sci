@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_5,2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit distutils-r1
 
@@ -20,8 +20,8 @@ KEYWORDS="~amd64 ~x86"
 SLOT="0"
 IUSE=""
 
-RDEPEND="sci-libs/opencascade"
+RDEPEND="sci-libs/opencascade:*"
 DEPEND="${RDEPEND}
-	dev-lang/swig"
+	dev-lang/swig:0"
 
 S="${WORKDIR}"/${P}/src

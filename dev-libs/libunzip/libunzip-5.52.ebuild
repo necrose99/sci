@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="2"
+EAPI=5
 
 inherit eutils flag-o-matic toolchain-funcs
 
@@ -15,14 +15,15 @@ SRC_URI="mirror://gentoo/${MY_PN}${PV/.}.tar.gz"
 LICENSE="Info-ZIP"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="static-libs"
 
 S="${WORKDIR}/${MY_PN}-${PV}"
 
 src_prepare() {
-	epatch "${FILESDIR}"/${P}-no-exec-stack.patch
-	epatch "${FILESDIR}"/${P}-CVE-2008-0888.patch #213761
-	epatch "${FILESDIR}"/${P}-Makefile.patch
+	epatch \
+		"${FILESDIR}"/${P}-no-exec-stack.patch \
+		"${FILESDIR}"/${P}-CVE-2008-0888.patch \
+		"${FILESDIR}"/${P}-Makefile.patch
 	sed -i \
 		-e 's:-O3:$(CFLAGS) $(CPPFLAGS):' \
 		-e 's:-O :$(CFLAGS) $(CPPFLAGS) :' \
@@ -41,14 +42,11 @@ src_prepare() {
 
 src_compile() {
 	append-lfs-flags #104315
-	emake -f unix/Makefile linux_shlib || die "emake failed"
+	emake -f unix/Makefile linux_shlib
 }
 
 src_install() {
-	dolib.so ${PN}.so.0.4 || die
-	dolib.so ${PN}.so.0 || die
-	dolib.so ${PN}.so || die
-	dolib.a ${PN}.a || die
-	insinto /usr/include
-	doins unzip.h || die
+	dolib.so ${PN}.so*
+	use static-libs && dolib.a ${PN}.a
+	doheader unzip.h
 }

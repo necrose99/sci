@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -15,7 +15,7 @@ HOMEPAGE="http://www.nmr.gu.se/~mdd/"
 SRC_URI="http://pc8.nmr.gu.se/~mdd/Downloads/${MY_P}.tgz"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS=""
 LICENSE="mddnmr"
 IUSE=""
 

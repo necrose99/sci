@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -12,7 +12,7 @@ SRC_URI="MODULE2.tar.gz"
 
 SLOT="0"
 LICENSE="all-rights-reserved"
-KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS=""
 IUSE=""
 
 RDEPEND="

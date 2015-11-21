@@ -1,10 +1,10 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit python-r1 versionator
 
@@ -33,8 +33,8 @@ src_install() {
 	"${EPREFIX}"/usr/bin/wsdl2py  wsdl/opal.wsdl || die
 
 	python_moduleinto AppService
-	python_parallel_foreach_impl python_domodule AppService_*.py
-	python_parallel_foreach_impl python_optimize
+	python_foreach_impl python_domodule AppService_*.py
+	python_foreach_impl python_optimize
 
 	dodoc README CHANGELOG etc/* *Client.py
 	dohtml docs/*

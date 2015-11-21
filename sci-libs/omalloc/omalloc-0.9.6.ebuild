@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
-EAPI="2"
+EAPI=5
 
 inherit eutils toolchain-funcs versionator
 
@@ -18,12 +18,9 @@ SRC_URI="${SRC_COM}/Singular-3-1-1-2.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="debug"
+IUSE=""
 
 S=${WORKDIR}/Singular-3-1-1/omalloc
-
-# Until tarballs are mirrored:
-RESTRICT="mirror"
 
 pkg_setup() {
 	tc-export CC CXX
@@ -39,11 +36,5 @@ src_configure() {
 }
 
 src_test () {
-	if use debug; then
-		emake check || die
-	fi
-}
-
-src_install () {
-	emake DESTDIR="${D}" install || die
+	emake check
 }

@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -8,15 +8,18 @@ inherit cmake-utils
 
 DESCRIPTION="OFFIS DICOM image files library and tools"
 HOMEPAGE="http://dicom.offis.de/dcmtk.php.en"
-SRC_URI="http://dicom.offis.de/download/dcmtk/release/${P}.tar.gz"
-LICENSE="BSD"
+SRC_URI="
+	http://dicom.offis.de/download/dcmtk/release/${P}.tar.gz
+	https://raw.githubusercontent.com/gentoo-science/sci/master/patches/07_doxygen.patch
+	"
 
+LICENSE="BSD"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 SLOT="0"
 IUSE="doc png ssl tcpd +threads tiff xml zlib"
 
 RDEPEND="
-	virtual/jpeg
+	virtual/jpeg:0=
 	png? ( media-libs/libpng:0= )
 	ssl? ( dev-libs/openssl:= )
 	tcpd? ( sys-apps/tcp-wrappers )
@@ -29,7 +32,7 @@ DEPEND="${RDEPEND}
 PATCHES=(
 	"${FILESDIR}"/${PN}-asneeded.patch
 	"${FILESDIR}"/02_dcmtk_3.6.0-1.patch
-	"${FILESDIR}"/07_doxygen.patch
+	"${DISTDIR}"/07_doxygen.patch
 	"${FILESDIR}"/prefs.patch
 	"${FILESDIR}"/dcmtk_version_number.patch
 	"${FILESDIR}"/regression_stacksequenceisodd.patch
@@ -68,5 +71,5 @@ src_configure() {
 }
 
 src_compile() {
-	cmake-utils_src_compile all $(use doc && echo html)
+	cmake-utils_src_compile all $(usex doc "html" "")
 }

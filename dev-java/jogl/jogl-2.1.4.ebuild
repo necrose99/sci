@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -21,7 +21,8 @@ SLOT="2.1"
 KEYWORDS="~amd64 ~x86"
 IUSE="cg"
 
-CDEPEND="=dev-java/gluegen-${PV}:${SLOT}
+CDEPEND="
+	=dev-java/gluegen-${PV}:${SLOT}
 	dev-java/antlr:0
 	dev-java/ant-core:0
 	x11-libs/libX11

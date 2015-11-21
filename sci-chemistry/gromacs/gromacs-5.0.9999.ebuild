@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -22,7 +22,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~x64-macos ~x86-macos"
 fi
 
-ACCE_IUSE="sse2 sse4_1 avx_128_fma avx_256 avx2_256"
+ACCE_IUSE="cpu_flags_x86_sse2 cpu_flags_x86_sse4_1 cpu_flags_x86_fma4 cpu_flags_x86_avx cpu_flags_x86_avx2"
 
 DESCRIPTION="The ultimate molecular dynamics simulation package"
 HOMEPAGE="http://www.gromacs.org/"
@@ -116,11 +116,11 @@ src_configure() {
 
 	#go from slowest to fastest acceleration
 	local acce="None"
-	use sse2 && acce="SSE2"
-	use sse4_1 && acce="SSE4.1"
-	use avx_128_fma && acce="AVX_128_FMA"
-	use avx_256 && acce="AVX_256"
-	use avx2_256 && acee="AVX2_256"
+	use cpu_flags_x86_sse2 && acce="SSE2"
+	use cpu_flags_x86_sse4_1 && acce="SSE4.1"
+	use cpu_flags_x86_fma4 && acce="AVX_128_FMA"
+	use cpu_flags_x86_avx && acce="AVX_256"
+	use cpu_flags_x86_avx2 && acce="AVX2_256"
 
 	#to create man pages, build tree binaries are executed (bug #398437)
 	[[ ${CHOST} = *-darwin* ]] && \
@@ -252,6 +252,11 @@ src_install() {
 		BUILD_DIR="${WORKDIR}/${P}_${x}_mpi" \
 			cmake-utils_src_install
 	done
+
+	if use tng; then
+		insinto /usr/include/tng
+		doins src/external/tng_io/include/tng/*h
+	fi
 	# drop unneeded stuff
 	rm "${ED}"usr/bin/GMXRC* || die
 	#concatenate all gmx-completion*, starting with gmx-completion.bash (fct defs)
@@ -259,9 +264,13 @@ src_install() {
 	for x in "${ED}"usr/bin/gmx-completion{,?*}.bash ; do
 		echo $(<${x})
 	done > "${T}"/gmx-bashcomp || die
-	newbashcomp "${T}"/gmx-bashcomp gromacs
+	newbashcomp "${T}"/gmx-bashcomp gmx
+	bashcomp_alias gmx mdrun
 	rm "${ED}"usr/bin/gmx-completion{,?*}.bash || die
-
+	if use double-precision && use single-precision; then
+		bashcomp_alias gmx gmx_d
+		bashcomp_alias gmx mdrun_d
+	fi
 	readme.gentoo_create_doc
 }
 

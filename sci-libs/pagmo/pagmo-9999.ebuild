@@ -1,17 +1,17 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit cmake-utils git-r3 python-single-r1
 
 DESCRIPTION="Parallelization engine for optimization problems"
-HOMEPAGE="http://pagmo.sourceforge.net/"
+HOMEPAGE="https://github.com/esa/pagmo"
 SRC_URI=""
-EGIT_REPO_URI="git://pagmo.git.sourceforge.net/gitroot/pagmo/pagmo"
+EGIT_REPO_URI="https://github.com/esa/${PN}.git git://github.com/esa/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"

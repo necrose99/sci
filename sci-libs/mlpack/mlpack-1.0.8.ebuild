@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
@@ -18,7 +18,7 @@ IUSE="debug doc"
 RDEPEND="
 	dev-libs/boost
 	dev-libs/libxml2
-	sci-libs/armadillo[lapack]"
+	>=sci-libs/armadillo-3.6.0[lapack]"
 
 DEPEND="${DEPEND}
 	app-text/txt2man

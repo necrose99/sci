@@ -1,6 +1,6 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI="5"
 
@@ -10,7 +10,7 @@ inherit distutils-r1
 
 DESCRIPTION="Access a cacophony of neuro-imaging file formats"
 HOMEPAGE="http://nipy.org/nibabel/"
-SRC_URI="https://github.com/nipy/nibabel/archive/${PV}.zip"
+SRC_URI="https://github.com/nipy/nibabel/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 KEYWORDS="~amd64 ~x86"
 
@@ -24,7 +24,7 @@ RDEPEND="
 	dev-python/nose[${PYTHON_USEDEP}]
 	dicom? (
 		sci-libs/pydicom[${PYTHON_USEDEP}]
-		virtual/python-imaging[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
 		)
 	"
 

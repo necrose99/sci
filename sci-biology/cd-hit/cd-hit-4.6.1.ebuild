@@ -1,8 +1,8 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/sci-biology/cd-hit/cd-hit-4.6.ebuild,v 1.1 2012/06/20 18:39:24 jlec Exp $
+# $Id$
 
-EAPI=4
+EAPI=5
 
 inherit eutils flag-o-matic toolchain-funcs
 

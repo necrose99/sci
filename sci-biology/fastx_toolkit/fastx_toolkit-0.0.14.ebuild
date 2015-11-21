@@ -1,8 +1,10 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
+
+inherit autotools
 
 DESCRIPTION="Tools for Short Read FASTA/FASTQ file processing"
 HOMEPAGE="http://hannonlab.cshl.edu/fastx_toolkit"
@@ -20,3 +22,12 @@ RDEPEND="${DEPEND}
 	sys-apps/sed
 	sci-visualization/gnuplot
 	sci-biology/libgtextutils"
+
+src_prepare() {
+	# remove pointless installation of generic autoconf-archive m4 macros
+	# causing file collisions with sys-devel/autoconf-archive
+	rm m4/Makefile.am || die
+	sed -i -e 's/m4 //g' Makefile.am || die
+
+	eautoreconf
+}

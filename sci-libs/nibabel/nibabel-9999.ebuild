@@ -1,6 +1,6 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI="5"
 
@@ -24,7 +24,7 @@ RDEPEND="
 	dev-python/nose[${PYTHON_USEDEP}]
 	dicom? (
 		sci-libs/pydicom[${PYTHON_USEDEP}]
-		virtual/python-imaging[${PYTHON_USEDEP}]
+		dev-python/pillow[${PYTHON_USEDEP}]
 		)
 	"
 

@@ -30,18 +30,19 @@
 
 #--- END OF EXAMPLES ---
 
+# Andreas K. Huettel <dilfridge@gentoo.org> (1 Nov 2014)
+# Lab::Instrument and Lab::Tools provided as separate packages
+# are way outdated. These are now supplied as parts of the package
+# Lab::Measurement (dev-perl/Lab-Measurement in the main portage
+# tree). Masked for removal.
+dev-perl/Lab-Instrument
+dev-perl/Lab-Tools
+
 # Jauhien Piatlicki <jauhien@gentoo.org> (13 Sep 2014)
 # dev-python/pythonocc-0.5 works only with sci-libs/opencascade-6.3
 # which is not available in the tree, see bug #522678
 # mask until bug is not fixed
 dev-python/pythonocc
-
-# Jauhien Piatlicki <jauhien@gentoo.org> (09 Sep 2014)
-# www-apps/swish-e masked in tree for removal
-# www-apps/py-swish-e should be masked until
-# www-apps/swish-e is properly maintained and
-# reintroduced back in tree or science overlay
-www-apps/py-swish-e
 
 # Honza Macháček <Hloupy.Honza@centrum.cz> (17 June 2013)
 # bigdft moved from sci-libs to sci-physics
@@ -64,29 +65,6 @@ sci-biology/artemis-bin
 # incompatible API with previous versions of metis (4)
 # masked until reverse depedencies are fixed
 >=sci-libs/parmetis-4
-
-# Justin Lecher <jlec@gentoo.org> (20 Feb 2012)
-# They are broken in one or the other way
-# Need to be bumped to emboss-6.4.0
-sci-biology/emboss
-sci-biology/embassy
-sci-biology/embassy-cbstools
-sci-biology/embassy-domainatrix
-sci-biology/embassy-domalign
-sci-biology/embassy-domsearch
-sci-biology/embassy-emnu
-sci-biology/embassy-esim4
-sci-biology/embassy-hmmer
-sci-biology/embassy-iprscan
-sci-biology/embassy-memenew
-sci-biology/embassy-mira
-sci-biology/embassy-mse
-sci-biology/embassy-phylipnew
-sci-biology/embassy-signature
-sci-biology/embassy-structure
-sci-biology/embassy-topo
-sci-biology/embassy-vienna
-sci-biology/embassy-clustalomega
 
 # Justin Lecher <jlec@gentoo.org> (24 Jun 2011)
 # paraview dep is masked

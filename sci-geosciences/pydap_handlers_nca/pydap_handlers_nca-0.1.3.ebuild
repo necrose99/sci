@@ -1,17 +1,17 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit distutils-r1
 
 MY_PN=${PN//_/.}
 MY_P=${P//_/.}
 
-DESCRIPTION="Aggregated NetCDF handler for Pydap Data Access Protocol server."
+DESCRIPTION="Aggregated NetCDF handler for Pydap Data Access Protocol server"
 HOMEPAGE="http://pydap.org/"
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 

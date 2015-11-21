@@ -1,10 +1,10 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python2_{6,7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit distutils-r1 flag-o-matic fortran-2 toolchain-funcs
 

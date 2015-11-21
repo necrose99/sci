@@ -1,10 +1,10 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
-PYTHON_COMPAT=( python{2_5,2_6,2_7} )
+PYTHON_COMPAT=( python2_7 )
 
 inherit eutils toolchain-funcs cmake-utils python-single-r1
 
@@ -21,7 +21,7 @@ RESTRICT="primaryuri"
 LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="debug doc examples fftw itkv3compat python review sse2 test vtkglue"
+IUSE="debug doc examples fftw itkv3compat python review cpu_flags_x86_sse2 test vtkglue"
 
 RDEPEND="
 	dev-libs/double-conversion:0=
@@ -30,14 +30,16 @@ RDEPEND="
 	sci-libs/dcmtk:0=
 	sci-libs/hdf5:0=[cxx]
 	sys-libs/zlib:0=
-	virtual/jpeg
+	virtual/jpeg:0=
 	fftw? ( sci-libs/fftw:3.0= )
 	vtkglue? ( sci-libs/vtk:0=[python?] )
 "
 DEPEND="${RDEPEND}
-	python? ( ${PYTHON_DEPS}
-			  >=dev-lang/swig-2.0
-			  >=dev-cpp/gccxml-0.9.0_pre20120309 )
+	python? (
+		${PYTHON_DEPS}
+		>=dev-lang/swig-2.0:0
+		>=dev-cpp/gccxml-0.9.0_pre20120309
+	)
 	doc? ( app-doc/doxygen )
 "
 
@@ -94,7 +96,7 @@ src_configure() {
 		$(cmake-utils_use_build examples EXAMPLES)
 		$(cmake-utils_use review ITK_USE_REVIEW)
 		$(cmake-utils_use itkv3compat ITKV3_COMPATIBILITY)
-		$(cmake-utils_use sse2 VNL_CONFIG_ENABLE_SSE2)
+		$(cmake-utils_use cpu_flags_x86_sse2 VNL_CONFIG_ENABLE_SSE2)
 	)
 	if use fftw; then
 		mycmakeargs+=(

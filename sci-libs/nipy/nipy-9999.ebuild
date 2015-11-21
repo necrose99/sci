@@ -1,11 +1,10 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Id$
 
 EAPI=5
 
 PYTHON_COMPAT=( python2_7 )
-DISTUTILS_NO_PARALLEL_BUILD=true
 
 inherit distutils-r1 multilib git-r3 flag-o-matic
 
