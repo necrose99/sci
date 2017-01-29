@@ -20,7 +20,7 @@ IUSE=""
 
 RESTRICT="fetch"
 
-DEPEND=">=virtual/jre-1.7:1.7"
+DEPEND="|| ( >=virtual/jre-1.7:1.7" >=virtual/jre-1.8.0-r1 )" 
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}"/${PN}
